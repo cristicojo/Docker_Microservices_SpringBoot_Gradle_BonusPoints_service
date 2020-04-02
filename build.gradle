@@ -1,0 +1,55 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.6.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+	id 'war'
+}
+
+group = 'employees'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
+	implementation 'com.google.code.gson:gson:2.8.5'
+	implementation 'io.rest-assured:rest-assured:4.1.2'
+	implementation 'io.rest-assured:json-path:4.1.2'
+	implementation 'io.rest-assured:xml-path:4.1.2'
+
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+
+
+	compile('org.springframework.cloud:spring-cloud-starter-eureka-server:1.4.0.RELEASE')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+
+
+}
+
+
+ext {
+	springCloudVersion = 'Hoxton.RELEASE'
+}
+
+dependencyManagement {
+	imports {
+		 mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
