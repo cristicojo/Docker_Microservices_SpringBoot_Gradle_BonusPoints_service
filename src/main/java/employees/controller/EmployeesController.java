@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 
 @RestController
 public class EmployeesController {
@@ -23,9 +25,17 @@ public class EmployeesController {
 
 
 	@GetMapping(value = "/callCrudServiceControllerThroughBonus", produces = MediaType.APPLICATION_JSON_VALUE)
+	@HystrixCommand(fallbackMethod = "getFallbackMethod")
 	public ResponseEntity<String> callCrudServiceController() {
 
-		return new ResponseEntity<>(restTemplate.getForObject(getBaseUrl()+"/rest_api/top/it/5", String.class), HttpStatus.OK);
+		return new ResponseEntity<>(restTemplate.getForObject(getBaseUrl() + "/rest_api/top/it/5", String.class), HttpStatus.OK);
+
+	}
+
+
+	public ResponseEntity<String> getFallbackMethod() {
+
+		return new ResponseEntity("CRUD_SERVICE_APPLICATION is DOWN in Eureka. Check Eureka Instances.....", HttpStatus.BAD_REQUEST);
 
 	}
 
@@ -33,14 +43,14 @@ public class EmployeesController {
 	@DeleteMapping(value = "/callCrudServiceControllerThroughBonus")
 	public void callCrudServiceDeleteAllController() {
 
-		 restTemplate.delete(getBaseUrl()+"/rest_api/all", String.class);
+		restTemplate.delete(getBaseUrl() + "/rest_api/all", String.class);
 
 	}
 
 
-	public String getBaseUrl(){
+	public String getBaseUrl() {
 
-		ServiceInstance instance=loadBalancerClient.choose("CRUDSERVICEAPPLICATION");
+		ServiceInstance instance = loadBalancerClient.choose("CRUD_SERVICE_APPLICATION");
 
 		return instance.getUri().toString();
 	}

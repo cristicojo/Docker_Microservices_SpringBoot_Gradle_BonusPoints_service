@@ -17,6 +17,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
 
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
@@ -30,10 +32,6 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
-
-
-	compile('org.springframework.cloud:spring-cloud-starter-eureka-server:1.4.0.RELEASE')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
 
 
 }
@@ -52,4 +50,9 @@ dependencyManagement {
 
 test {
 	useJUnitPlatform()
+}
+
+
+bootWar {
+	archiveName('bonus_points_service.jar')
 }
