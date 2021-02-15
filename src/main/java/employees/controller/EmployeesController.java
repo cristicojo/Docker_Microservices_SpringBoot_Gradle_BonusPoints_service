@@ -21,21 +21,21 @@ public class EmployeesController {
 	private LoadBalancerClient loadBalancerClient;
 
 
-	private RestTemplate restTemplate = new RestTemplate();
+	private final RestTemplate REST_TEMPLATE = new RestTemplate();
 
 
 	@GetMapping(value = "/callCrudServiceControllerThroughBonus", produces = MediaType.APPLICATION_JSON_VALUE)
 	@HystrixCommand(fallbackMethod = "getFallbackMethod")
 	public ResponseEntity<String> callCrudServiceController() {
 
-		return new ResponseEntity<>(restTemplate.getForObject(getBaseUrl() + "/rest_api/top/it/5", String.class), HttpStatus.OK);
+		return new ResponseEntity<>(REST_TEMPLATE.getForObject(getBaseUrl() + "/rest_api/top/it/5", String.class), HttpStatus.OK);
 
 	}
 
 
 	public ResponseEntity<String> getFallbackMethod() {
 
-		return new ResponseEntity("CRUD_SERVICE_APPLICATION is DOWN in Eureka. Check Eureka Instances.....", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("CRUD_SERVICE_APPLICATION is DOWN in Eureka. Check Eureka Instances.....", HttpStatus.BAD_REQUEST);
 
 	}
 
@@ -43,7 +43,7 @@ public class EmployeesController {
 	@DeleteMapping(value = "/callCrudServiceControllerThroughBonus")
 	public void callCrudServiceDeleteAllController() {
 
-		restTemplate.delete(getBaseUrl() + "/rest_api/all", String.class);
+		REST_TEMPLATE.delete(getBaseUrl() + "/rest_api/all", String.class);
 
 	}
 
