@@ -15,12 +15,12 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 public class EmployeesController {
 
-	private final LoadBalancerClient loadBalancerClient;
-	private final RestTemplate RESTTEMPLATE = new RestTemplate();
+	private final LoadBalancerClient LOAD_BALANCER_CLIENT;
+	private final RestTemplate REST_TEMPLATE = new RestTemplate();
 
 
 	public EmployeesController(LoadBalancerClient loadBalancerClient) {
-		this.loadBalancerClient = loadBalancerClient;
+		this.LOAD_BALANCER_CLIENT = loadBalancerClient;
 	}
 
 
@@ -28,7 +28,7 @@ public class EmployeesController {
 	@HystrixCommand(fallbackMethod = "getFallbackMethod")
 	public ResponseEntity<String> callCrudServiceController() {
 
-		return new ResponseEntity<>(RESTTEMPLATE.getForObject(getBaseUrl() + "/rest_api/top/it/5", String.class), HttpStatus.OK);
+		return new ResponseEntity<>(REST_TEMPLATE.getForObject(getBaseUrl() + "/rest_api/top/it/5", String.class), HttpStatus.OK);
 
 	}
 
@@ -43,14 +43,14 @@ public class EmployeesController {
 	@DeleteMapping(value = "/callCrudServiceControllerThroughBonus")
 	public void callCrudServiceDeleteAllController() {
 
-		RESTTEMPLATE.delete(getBaseUrl() + "/rest_api/all", String.class);
+		REST_TEMPLATE.delete(getBaseUrl() + "/rest_api/all", String.class);
 
 	}
 
 
 	public String getBaseUrl() {
 
-		ServiceInstance instance = loadBalancerClient.choose("CRUD_SERVICE_APPLICATION");
+		ServiceInstance instance = LOAD_BALANCER_CLIENT.choose("CRUD_SERVICE_APPLICATION");
 
 		return instance.getUri().toString();
 	}
