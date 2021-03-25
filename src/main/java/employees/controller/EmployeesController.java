@@ -1,6 +1,6 @@
 package employees.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpStatus;
@@ -11,24 +11,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-
 
 @RestController
 public class EmployeesController {
 
-	@Autowired
-	private LoadBalancerClient loadBalancerClient;
+	private final LoadBalancerClient loadBalancerClient;
+	private final RestTemplate RESTTEMPLATE = new RestTemplate();
 
 
-	private final RestTemplate REST_TEMPLATE = new RestTemplate();
+	public EmployeesController(LoadBalancerClient loadBalancerClient) {
+		this.loadBalancerClient = loadBalancerClient;
+	}
 
 
 	@GetMapping(value = "/callCrudServiceControllerThroughBonus", produces = MediaType.APPLICATION_JSON_VALUE)
 	@HystrixCommand(fallbackMethod = "getFallbackMethod")
 	public ResponseEntity<String> callCrudServiceController() {
 
-		return new ResponseEntity<>(REST_TEMPLATE.getForObject(getBaseUrl() + "/rest_api/top/it/5", String.class), HttpStatus.OK);
+		return new ResponseEntity<>(RESTTEMPLATE.getForObject(getBaseUrl() + "/rest_api/top/it/5", String.class), HttpStatus.OK);
 
 	}
 
@@ -43,7 +43,7 @@ public class EmployeesController {
 	@DeleteMapping(value = "/callCrudServiceControllerThroughBonus")
 	public void callCrudServiceDeleteAllController() {
 
-		REST_TEMPLATE.delete(getBaseUrl() + "/rest_api/all", String.class);
+		RESTTEMPLATE.delete(getBaseUrl() + "/rest_api/all", String.class);
 
 	}
 
