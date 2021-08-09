@@ -34,7 +34,6 @@ public class EmployeesController {
 
 
 	public ResponseEntity<String> getFallbackMethod() {
-
 		return new ResponseEntity<>("CRUD_SERVICE_APPLICATION is DOWN in Eureka. Check Eureka Instances.....", HttpStatus.BAD_REQUEST);
 
 	}
@@ -42,7 +41,6 @@ public class EmployeesController {
 
 	@DeleteMapping(value = "/callCrudServiceControllerThroughBonus")
 	public void callCrudServiceDeleteAllController() {
-
 		REST_TEMPLATE.delete(getBaseUrl() + "/rest_api/all", String.class);
 
 	}
@@ -51,8 +49,7 @@ public class EmployeesController {
 	public String getBaseUrl() {
 
 		ServiceInstance instance = LOAD_BALANCER_CLIENT.choose("CRUD_SERVICE_APPLICATION");
-
 		return instance.getUri().toString();
-	}
 
+	}
 }
