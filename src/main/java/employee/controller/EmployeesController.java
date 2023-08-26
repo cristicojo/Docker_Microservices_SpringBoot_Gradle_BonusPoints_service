@@ -28,7 +28,7 @@ public class EmployeesController {
 	@HystrixCommand(fallbackMethod = "getFallbackMethod")
 	public ResponseEntity<String> callCrudServiceController() {
 
-		return new ResponseEntity<>(REST_TEMPLATE.getForObject(getBaseUrl() + "/rest_api/top/it/5", String.class), HttpStatus.OK);
+		return new ResponseEntity<>(REST_TEMPLATE.getForObject(getBaseUrl() + "/api/top/it/5", String.class), HttpStatus.OK);
 
 	}
 
@@ -41,7 +41,7 @@ public class EmployeesController {
 
 	@DeleteMapping(value = "/callCrudServiceControllerThroughBonus")
 	public void callCrudServiceDeleteAllController() {
-		REST_TEMPLATE.delete(getBaseUrl() + "/rest_api/all", String.class);
+		REST_TEMPLATE.delete(getBaseUrl() + "/api/all", String.class);
 
 	}
 
