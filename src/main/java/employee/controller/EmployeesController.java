@@ -1,4 +1,4 @@
-package employees.controller;
+package employee.controller;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.cloud.client.ServiceInstance;
